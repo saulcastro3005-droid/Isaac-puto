@@ -1,0 +1,138 @@
+#include <iostream>
+using namespace std;
+
+
+
+class Producto{
+
+private:
+string nombre;
+int precio;
+int cantidad;
+
+public:
+Producto(){
+
+nombre = "";
+precio = 0;
+cantidad = 0;
+
+}
+
+Producto(string nombre, int precio, int cantidad){
+
+this->nombre = nombre;
+this->precio = precio;
+this->cantidad = cantidad;
+
+}
+void setNombre(string nombre){
+    this ->nombre = nombre;
+}
+
+string getNombre(){return nombre;}
+int getPrecio(){return precio;}
+int getCantidad(){return cantidad;}
+
+void Imprimir(){
+cout<<"Nombre: "<<getNombre()<<" = "<<getPrecio()<<"$ x"<<getCantidad()<<endl;
+}
+
+};
+
+class Inventario{
+
+private:
+Producto* almacen;
+int cantTotal;
+int cap;//acidad
+
+public:
+Inventario(int cap){
+
+this->cap = cap;
+cantTotal = 0;
+almacen = new Producto[cap];
+
+}
+
+~Inventario() {
+        delete[] almacen; // Correcto: coincide con new[]
+    }
+
+void agregarProducto(Producto p){
+
+    if(cantTotal < cap){
+        
+        almacen[cantTotal] = p;
+        cantTotal++;}else{
+    
+    cout<<"Capacidad maxima alcanzada"<<endl;
+    }
+
+}
+
+void MostrarTodo(){
+
+for(int i = 0; i < cantTotal; i++){
+cout<<"Producto: "<<i+1<<endl;
+almacen[i].Imprimir();
+    }
+}
+
+Producto* buscarProducto(Producto p){
+
+for(int i = 0; i < cantTotal; i++){
+
+if(p.getNombre() == almacen[i].getNombre()){return &almacen[i];}
+}
+
+return nullptr;
+}
+
+};
+
+int main(){
+
+
+    Producto p("Oreo",3,4);
+    Producto p2("Chiky",5,9);
+    Producto p3("Principe",2,32);
+    Producto p4("Gato",1,20);
+    Producto p5("Hi-C",20,20);
+    Producto p6("Jenga",1, 99);
+
+    Inventario C1(5);
+    C1.agregarProducto(p);
+    C1.agregarProducto(p2);
+    C1.agregarProducto(p3);
+    C1.agregarProducto(p4);
+    C1.agregarProducto(p5);
+
+    C1.MostrarTodo();
+
+cout<<"\nREALIZANDO CAMBIO...\n"<<endl;
+
+    Producto* ptr1 = C1.buscarProducto(p4);
+    Producto* ptr2 = C1.buscarProducto(p5);
+    Producto* ptr3 = C1.buscarProducto(p6);
+
+
+    if(ptr1 != nullptr){
+        ptr1 -> setNombre("Perro"); cout<<"Cambio efectivo!"<<endl;
+    }else{cout<<"No apunta a ningun lado el puntero!"<<endl;}
+    if(ptr2 != nullptr){
+        ptr2 -> setNombre("No-C");cout<<"Cambio efectivo!"<<endl;
+    }else{cout<<"No apunta a ningun lado el puntero!"<<endl;}
+    if(ptr3 != nullptr){
+        ptr3 -> setNombre("Domino");cout<<"Cambio efectivo!"<<endl;
+    }else{cout<<"No apunta a ningun lado el puntero!"<<endl;}
+
+cout<<"\n\nLUEGO DEL CAMBIO Y LA BUSQUEDA:\n"<<endl;
+
+    C1.MostrarTodo();
+
+
+
+    return 0;
+}
